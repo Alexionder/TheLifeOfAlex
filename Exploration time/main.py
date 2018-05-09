@@ -1,4 +1,5 @@
 from items import *
+import random
 worldLimit = 50
 world = [[-1 for y in range (worldLimit)] for x in range(worldLimit)]
 hp = 100
@@ -70,10 +71,13 @@ while on:
             else:
                 print "You are holding a " + slotA.name + "."
         else:
-            item = sentence[1] + sentence[2] + sentence[3] + sentence[4]
-            if item == slotA.name:
+            item = sentence[1]
+            for it in sentence[2:]:
+                if it != "":
+                    item += " " + it
+            if slotA != None and item == slotA.name:
                 slotA.inspect()
-            elif item == slotB.name:
+            elif slotB != None and item == slotB.name:
                 slotB.inspect()
             else:
                 print "You do not have that"
@@ -96,6 +100,19 @@ while on:
             print "Going east."
         else:
             print "You cannot go there."
+
+        if world[x][y] == -1:
+            world[x][y] = []
+            for i in range(random.randint(1, 4)):
+                chance = random.randint(0, 3)
+                if chance == 0:
+                    world[x][y].append(Sword(random.randint(10, 25), random.randint(3, 10), "sword"))
+                elif chance == 1:
+                    world[x][y].append(Axe(random.randint(10, 25), random.randint(3, 10), "axe"))
+                elif chance == 2:
+                    world[x][y].append(HPbottle(random.randint(10, 70)))
+                else:
+                    world[x][y].append(Food(random.randint(10, 70), "bread"))
     elif sentence[0] == "take":
         item = sentence[1]
         for it in sentence[2:]:
@@ -161,8 +178,11 @@ while on:
                 slotB = None
         else:
             print "You don't have that equipped."
+    elif sentence[0] == "devins":
+        print world[x][y]
     else:
         print "That is not something that I understand."
+    print "***"
 
 
 print ""
